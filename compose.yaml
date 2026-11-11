@@ -1,0 +1,25 @@
+services:
+  share:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: better-real-me-share:1.0.0
+    restart: unless-stopped
+    environment:
+      REAL_ME_DATA_DIR: /data
+      REAL_ME_LISTEN: 0.0.0.0:18766
+      REAL_ME_PUBLIC_URL: ${REAL_ME_PUBLIC_URL:?请设置 REAL_ME_PUBLIC_URL}
+    ports:
+      - "127.0.0.1:18766:18766"
+    volumes:
+      - share_data:/data
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+
+volumes:
+  share_data:
